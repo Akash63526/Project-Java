@@ -1,0 +1,149 @@
+Banking Management System
+// Source code is decompiled from a .class file using FernFlower decompiler.
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+class BankManagement extends JFrame implements ActionListener {
+   private JButton btnCreateAccount;
+   private JButton btnDeposit;
+   private JButton btnWithdraw;
+   private JButton btnTransfer;
+   private JButton btnBalance;
+   private JButton btnExit;
+   private JTextArea displayArea;
+   private HashMap<String, Double> accounts;
+
+   public BankManagement() {
+      this.setTitle("Bank Management System");
+      this.setSize(600, 400);
+      this.setLayout(new BorderLayout());
+      this.accounts = new HashMap();
+      JPanel var1 = new JPanel();
+      var1.setLayout(new GridLayout(6, 1));
+      this.btnCreateAccount = new JButton("Create Account");
+      this.btnDeposit = new JButton("Deposit");
+      this.btnWithdraw = new JButton("Withdraw");
+      this.btnTransfer = new JButton("Transfer");
+      this.btnBalance = new JButton("Check Balance");
+      this.btnExit = new JButton("Exit");
+      var1.add(this.btnCreateAccount);
+      var1.add(this.btnDeposit);
+      var1.add(this.btnWithdraw);
+      var1.add(this.btnTransfer);
+      var1.add(this.btnBalance);
+      var1.add(this.btnExit);
+      this.displayArea = new JTextArea();
+      JScrollPane var2 = new JScrollPane(this.displayArea);
+      this.add(var1, "West");
+      this.add(var2, "Center");
+      this.btnCreateAccount.addActionListener(this);
+      this.btnDeposit.addActionListener(this);
+      this.btnWithdraw.addActionListener(this);
+      this.btnTransfer.addActionListener(this);
+      this.btnBalance.addActionListener(this);
+      this.btnExit.addActionListener(this);
+      this.setDefaultCloseOperation(3);
+      this.setVisible(true);
+   }
+
+   public void actionPerformed(ActionEvent var1) {
+      if (var1.getSource() == this.btnCreateAccount) {
+         this.createAccount();
+      } else if (var1.getSource() == this.btnDeposit) {
+         this.deposit();
+      } else if (var1.getSource() == this.btnWithdraw) {
+         this.withdraw();
+      } else if (var1.getSource() == this.btnTransfer) {
+         this.transfer();
+      } else if (var1.getSource() == this.btnBalance) {
+         this.checkBalance();
+      } else if (var1.getSource() == this.btnExit) {
+         System.exit(0);
+      }
+
+   }
+
+   private void createAccount() {
+      String var1 = JOptionPane.showInputDialog(this, "Enter Account Number:");
+      if (this.accounts.containsKey(var1)) {
+         this.displayArea.append("Account already exists!\n");
+      } else {
+         this.accounts.put(var1, 0.0);
+         this.displayArea.append("Account created successfully!\n");
+      }
+
+   }
+
+   private void deposit() {
+      String var1 = JOptionPane.showInputDialog(this, "Enter Account Number:");
+      if (this.accounts.containsKey(var1)) {
+         String var2 = JOptionPane.showInputDialog(this, "Enter Deposit Amount:");
+         double var3 = Double.parseDouble(var2);
+         this.accounts.put(var1, (Double)this.accounts.get(var1) + var3);
+         this.displayArea.append("Deposited " + var3 + " to account " + var1 + "\n");
+      } else {
+         this.displayArea.append("Account not found!\n");
+      }
+
+   }
+
+   private void withdraw() {
+      String var1 = JOptionPane.showInputDialog(this, "Enter Account Number:");
+      if (this.accounts.containsKey(var1)) {
+         String var2 = JOptionPane.showInputDialog(this, "Enter Withdraw Amount:");
+         double var3 = Double.parseDouble(var2);
+         if ((Double)this.accounts.get(var1) >= var3) {
+            this.accounts.put(var1, (Double)this.accounts.get(var1) - var3);
+            this.displayArea.append("Withdrew " + var3 + " from account " + var1 + "\n");
+         } else {
+            this.displayArea.append("Insufficient balance!\n");
+         }
+      } else {
+         this.displayArea.append("Account not found!\n");
+      }
+
+   }
+
+   private void transfer() {
+      String var1 = JOptionPane.showInputDialog(this, "Enter From Account Number:");
+      String var2 = JOptionPane.showInputDialog(this, "Enter To Account Number:");
+      if (this.accounts.containsKey(var1) && this.accounts.containsKey(var2)) {
+         String var3 = JOptionPane.showInputDialog(this, "Enter Transfer Amount:");
+         double var4 = Double.parseDouble(var3);
+         if ((Double)this.accounts.get(var1) >= var4) {
+            this.accounts.put(var1, (Double)this.accounts.get(var1) - var4);
+            this.accounts.put(var2, (Double)this.accounts.get(var2) + var4);
+            this.displayArea.append("Transferred " + var4 + " from account " + var1 + " to account " + var2 + "\n");
+         } else {
+            this.displayArea.append("Insufficient balance in " + var1 + "\n");
+         }
+      } else {
+         this.displayArea.append("One or both accounts not found!\n");
+      }
+
+   }
+
+   private void checkBalance() {
+      String var1 = JOptionPane.showInputDialog(this, "Enter Account Number:");
+      if (this.accounts.containsKey(var1)) {
+         double var2 = (Double)this.accounts.get(var1);
+         this.displayArea.append("Account " + var1 + " has balance: " + var2 + "\n");
+      } else {
+         this.displayArea.append("Account not found!\n");
+      }
+
+   }
+
+   public static void main(String[] var0) {
+      new BankManagement();
+   }
+}
